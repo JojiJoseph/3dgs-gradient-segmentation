@@ -25,7 +25,7 @@ def _detach_tensors_from_dict(d, inplace=True):
     return d
 
 
-def load_checkpoint(checkpoint: str, data_dir: str, rasterizer: str="original", data_factor: int = 1):
+def load_checkpoint(checkpoint: str, data_dir: str, rasterizer: Literal["original", "gsplat"]="original", data_factor: int = 1):
 
     colmap_project = pycolmap.SceneManager(f"{data_dir}/sparse/0")
     colmap_project.load_cameras()
@@ -519,7 +519,7 @@ def main(
         prompt: str = "chair", # prompt
         results_dir: str = "./results/chair", # output path
         show_visual_feedback: bool = True, # Will show opencv window,
-        rasterizer: str = "original", # Original or GSplat
+        rasterizer: Literal["original", "gsplat"] = "original", # Original or GSplat for checkpoints
         data_factor: int = 1,
         mask_interval: int = 1,
         voting_method: Literal["gradient", "binary", "projection"] = "gradient",
