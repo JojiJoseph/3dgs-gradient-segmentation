@@ -308,7 +308,7 @@ def get_mask3d(splats, prompt, data_dir: str, results_dir: str, show_visual_feed
             frame = cv2.imread(image_path)
             mask = masks[0, 0].cpu().numpy() >= 0
             mask = mask.astype(float)
-            # mask = cv2.blur(mask, (7, 7))
+            mask = cv2.blur(mask, (7, 7))
             mask = mask > 0
             mask = mask.astype(bool)
 

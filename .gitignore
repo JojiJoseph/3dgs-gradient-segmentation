@@ -1,0 +1,6 @@
+data
+results
+*.zip
+checkpoints
+*.pt
+*.pth
