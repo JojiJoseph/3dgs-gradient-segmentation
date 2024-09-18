@@ -9,12 +9,10 @@ Project page: https://jojijoseph.github.io/3dgs-segmentation
 ```bash
 python demo.py
 ```
-Demo data can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
+Sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
 
 
-
-https://github.com/user-attachments/assets/8e731160-60d4-4bec-be83-46d8eac4fecd
-
+https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
 
 
 ## Some Downstream Applications
