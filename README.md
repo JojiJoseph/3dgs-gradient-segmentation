@@ -10,6 +10,12 @@ Preprint: https://arxiv.org/abs/2409.11681
 ```bash
 python demo.py
 ```
+
+To see more options,
+```bash
+python demo.py --help
+```
+
 Sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
 
 
