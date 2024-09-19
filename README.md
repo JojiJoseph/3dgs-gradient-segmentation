@@ -24,6 +24,11 @@ https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
 python affordance_transfer_pipeline.py --help
 ```
 
+Left: Source images, Mid: 2D-2D affordance transfer, Right: 2D-3D Affordance transfer
+
+https://github.com/user-attachments/assets/65406bb7-f690-42d5-aca6-59046e08de08
+
+
 ## Affordance Transfer - Evaluation
 
 Download trained scenes from [here](https://drive.google.com/file/d/1-f-rW3U1H5RqdCvp-1BcuSZxrEGc3Rxo/view?usp=sharing). Original scenes (without trained Gaussian Splat models) can be found at https://users.umiacs.umd.edu/~fer/affordance/Affordance.html.
