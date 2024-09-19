@@ -107,7 +107,7 @@ def load_checkpoint(
             "opacity": model_params[6].squeeze(1),
         }
     elif rasterizer == "gsplat":
-        print(model["splats"].keys())
+
         model_params = model["splats"]
         splats = {
             "active_sh_degree": 3,
@@ -400,6 +400,8 @@ def render_and_vote(data_dir, checkpoint, results_dir):
 
 
 def calculate_affordance_map(data_dir, labels_dir, results_dir, k=5):
+    def most_frequent(array):
+        return np.bincount(array).argmax()
     images_dir = os.path.join(results_dir, "images")
     affordance_map_dir = os.path.join(results_dir, "affordance_maps")
     affordance_map_images_dir = os.path.join(results_dir, "affordance_map_images")
@@ -421,10 +423,6 @@ def calculate_affordance_map(data_dir, labels_dir, results_dir, k=5):
         feats = feats / torch.norm(feats, dim=-1, keepdim=True)
         feats_flatten = feats.detach().cpu().numpy().reshape((-1, DIM))
         D, I = feature_index.search(feats_flatten, k)
-        def most_frequent(array):
-                return np.bincount(array).argmax()
-        # print(labels.dtype, labels.shape, labels.min(), labels.max())
-        # exit()
         label_set = labels[I].astype(np.uint8)
         label_set = np.apply_along_axis(most_frequent, axis=1, arr=label_set)
         affordance_map = label_set.reshape((FEATURE_MAP_SIZE, FEATURE_MAP_SIZE)).astype(np.uint8)
@@ -446,10 +444,8 @@ def calculate_affordance_map(data_dir, labels_dir, results_dir, k=5):
             color = color_palette[i].tolist()
             cv2.putText(img_out, IDX_TO_LABEL[i], (10, 10 + 20*i), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
 
-        cv2.imshow("Feedback", img_out)
+        cv2.imshow("2D-2D Affordance Transfer", img_out)
         cv2.imwrite(os.path.join(affordance_map_images_dir, image_name), img_out)
-        # cv2.imwrite("./2d-2d affordance transfer.png", img_out)
-        # exit()
         cv2.waitKey(1)
 
     cv2.destroyAllWindows()
@@ -475,7 +471,7 @@ def evaluate_results(data_dir, checkpoint, results_dir):
 
     # For affordance map
 
-    print("Evaluating affordance maps")
+    print("\n\nEvaluating affordance maps")
     for image, label_file in zip(sorted(colmap_project.images.values(), key=lambda x: x.name), label_files):
         # gt_name = image.name.replace("_rgb.jpg", "_label.mat")
         # image_path = os.path.join(data_dir, "images", image.name)
@@ -485,14 +481,12 @@ def evaluate_results(data_dir, checkpoint, results_dir):
         if gt["gt_type"] == "automatic":
             continue
         gt_label = gt["gt_label"]
-        # print(gt_label.shape)
+
         affordance_map_name = image.name.replace(".jpg", ".npy")
         affordance_map_path = os.path.join(affordance_maps_dir, affordance_map_name)
         affordance_map = np.load(affordance_map_path)
         affordance_map = cv2.resize(affordance_map, (gt_label.shape[1], gt_label.shape[0]), interpolation=cv2.INTER_NEAREST)
-        # print(affordance_map.shape)
-        # print(gt.shape, affordance_map.shape)
-        # exit()
+
         for i in range(1, 8):
             gt_mask = gt_label == i
             affordance_mask = affordance_map == i
