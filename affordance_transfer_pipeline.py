@@ -471,7 +471,7 @@ def evaluate_results(data_dir, checkpoint, results_dir):
 
     # For affordance map
 
-    print("\n\nEvaluating affordance maps")
+    print("\n\nEvaluating 2D-2D affordance transfer.")
     for image, label_file in zip(sorted(colmap_project.images.values(), key=lambda x: x.name), label_files):
         # gt_name = image.name.replace("_rgb.jpg", "_label.mat")
         # image_path = os.path.join(data_dir, "images", image.name)
@@ -528,7 +528,7 @@ def evaluate_results(data_dir, checkpoint, results_dir):
     print(f"Recall: {res_recall}")
 
 
-    print("\nEvaluating transfer results")
+    print("\nEvaluating 2D-3D affordance transfer.")
     mIoU = defaultdict(list)
     recall = defaultdict(list)
     means = splats["means"]
@@ -641,7 +641,7 @@ def main(
     # Render and vote
     render_and_vote(data_dir, checkpoint, results_dir)
 
-    # Evaluate the results
+    # Evaluate the results. Comment out if you don't want to evaluate
     evaluate_results(data_dir, checkpoint, results_dir)
 
 

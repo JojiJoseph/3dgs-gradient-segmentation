@@ -8,18 +8,29 @@ Preprint: https://arxiv.org/abs/2409.11681
 ## Demo
 
 ```bash
-python demo.py
-```
-
-To see more options,
-```bash
 python demo.py --help
 ```
 
-Sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
+If you need, sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
+
 
 
 https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
+
+
+## Affordance Transfer
+
+```bash
+python affordance_transfer_pipeline.py --help
+```
+
+## Affordance Transfer - Evaluation
+
+Download trained scenes from [here](https://drive.google.com/file/d/1-f-rW3U1H5RqdCvp-1BcuSZxrEGc3Rxo/view?usp=sharing). Original scenes (without trained Gaussian Splat models) can be found at https://users.umiacs.umd.edu/~fer/affordance/Affordance.html.
+
+```sh
+sh eval_affordance_transfer.sh | tee affordance_transfer.log
+```
 
 
 ## Some Downstream Applications
