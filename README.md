@@ -1,14 +1,21 @@
-# Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting
+# Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting Using 2D Masks
 
-This repository contains the code for the paper "Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting Using 2D Masks".
+This repository contains the code for the paper **Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting Using 2D Masks**.
 
 Project page: https://jojijoseph.github.io/3dgs-segmentation
+Preprint: https://arxiv.org/abs/2409.11681
 
 ## Demo
 
 ```bash
 python demo.py
 ```
+
+To see more options,
+```bash
+python demo.py --help
+```
+
 Sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
 
 
@@ -25,3 +32,23 @@ Reorganzing objects in real time.
 
 https://github.com/user-attachments/assets/91cc6ef1-0fd2-44a5-8881-61a042662a95
 
+## Acknowledgements
+
+A big thanks to the following tools/libraries, which were instrumental in this project:
+
+- [gsplat](https://github.com/nerfstudio-project/gsplat): 3DGS rasterizer.
+- [SAM 2](https://github.com/facebookresearch/segment-anything-2): To track masks throughout the frames.
+- [YOLO-World](https://github.com/AILab-CVC/YOLO-World) via [ultralytics](https://docs.ultralytics.com/models/yolo-world/): To find Initial bounding box.
+- [labelme](https://github.com/labelmeai/labelme): To label the source images for affordance transfer.
+
+## Citation
+If you find this paper or the code helpful for your work, please consider citing our preprint,
+```
+@article{joji2024gradient,
+  title={Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting from 2D Masks},
+  author={Joji Joseph and Bharadwaj Amrutur and Shalabh Bhatnagar},
+  journal={arXiv preprint arXiv:2409.11681},
+  year={2024},
+  url={https://arxiv.org/abs/2409.11681}
+}
+```
