@@ -25,3 +25,14 @@ Reorganzing objects in real time.
 
 https://github.com/user-attachments/assets/91cc6ef1-0fd2-44a5-8881-61a042662a95
 
+## Citation
+If you find this paper or the code helpful for your work, please consider citing our preprint,
+```
+@article{joji2024gradient,
+  title={Gradient-Driven 3D Segmentation and Affordance Transfer in Gaussian Splatting from 2D Masks},
+  author={Joji Joseph and Bharadwaj Amrutur and Shalabh Bhatnagar},
+  journal={arXiv preprint arXiv:2409.11681},
+  year={2024},
+  url={https://arxiv.org/abs/2409.11681}
+}
+```
