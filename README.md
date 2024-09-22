@@ -7,7 +7,7 @@ Preprint: https://arxiv.org/abs/2409.11681
 
 ## Setup
 
-Please install the dependencies listed in `requirements.txt`. Other than that, it's a self-contained repo.
+Please install the dependencies listed in `requirements.txt`. Other than that, it's a self-contained repo. Please raise an issue if you face any problems while running the code.
 
 ## Demo
 
