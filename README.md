@@ -5,6 +5,10 @@ This repository contains the code for the paper **Gradient-Driven 3D Segmentatio
 Project page: https://jojijoseph.github.io/3dgs-segmentation
 Preprint: https://arxiv.org/abs/2409.11681
 
+## Setup
+
+Please install the dependencies listed in `requirements.txt`. Other than that, it's a self-contained repo.
+
 ## Demo
 
 ```bash
