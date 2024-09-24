@@ -5,6 +5,8 @@ This repository contains the code for the paper **Gradient-Driven 3D Segmentatio
 Project page: https://jojijoseph.github.io/3dgs-segmentation
 Preprint: https://arxiv.org/abs/2409.11681
 
+**Update**: Sep 24, 2024 - Our poster titled **Segmentation of 3D Gaussians using Masked Gradients**, corresponds to the **preliminary work**, has been accepted to **SIGGRAPH Asia 2024**.
+
 ## Setup
 
 Please install the dependencies listed in `requirements.txt` via `pip install -r requirements.txt`. Download `sam2_hiera_large.pt` from https://huggingface.co/facebook/sam2-hiera-large/tree/main and place it in the `./checkpoints` folder. 
