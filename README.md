@@ -7,7 +7,9 @@ Preprint: https://arxiv.org/abs/2409.11681
 
 ## Setup
 
-Please install the dependencies listed in `requirements.txt`. Other than that, it's a self-contained repo. Please raise an issue if you face any problems while running the code.
+Please install the dependencies listed in `requirements.txt` via `pip install -r requirements.txt`. Download `sam2_hiera_large.pt` from https://huggingface.co/facebook/sam2-hiera-large/tree/main and place it in the `./checkpoints` folder. 
+
+Other than that, it's a self-contained repo. Please feel free to raise an issue if you face any problems while running the code.
 
 ## Demo
 
@@ -15,7 +17,7 @@ Please install the dependencies listed in `requirements.txt`. Other than that, i
 python demo.py --help
 ```
 
-If you need, sample data (chair) can be found at https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing
+If needed, sample data (chair) can be found [here](https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing). Please create a folder named `data` on root folder and extract the contents of zip file to that folder. Then simply run `python demo.py`.
 
 
 
@@ -28,7 +30,7 @@ https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
 python affordance_transfer_pipeline.py --help
 ```
 
-Left: Source images, Mid: 2D-2D affordance transfer, Right: 2D-3D Affordance transfer
+Left: Source images, Middle: 2D-2D affordance transfer, Right: 2D-3D Affordance transfer
 
 https://github.com/user-attachments/assets/65406bb7-f690-42d5-aca6-59046e08de08
 
