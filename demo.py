@@ -164,7 +164,8 @@ def prune_by_gradients(splats):
             height=K[1, 2] * 2,
         )
         frame_idx += 1
-        pseudo_loss = ((output.detach() + 1 - output)**2).mean()
+        # pseudo_loss = ((output.detach() + 1 - output)**2).mean()
+        pseudo_loss = output.mean()
         pseudo_loss.backward()
         # print(colors.grad.shape)
         gaussian_grads += (colors.grad[:,0]).norm(dim=[1])
