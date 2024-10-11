@@ -182,7 +182,7 @@ def prune_by_gradients(splats):
     splats["scaling"] = splats["scaling"][mask]
     splats["rotation"] = splats["rotation"][mask]
     splats["opacity"] = splats["opacity"][mask]
-    return splats
+    return splats, mask
 
 def test_proper_pruning(splats, splats_after_pruning):
     colmap_project = splats["colmap_project"]
@@ -514,6 +514,14 @@ def render_mask_pred(output_dir: str, splats, feedback: bool = False):
     if feedback:
         cv2.destroyAllWindows()
 
+def export_mask(mask3d, results_dir: str, prune_mask=None):
+    if prune_mask is not None:
+        mask3d_export = torch.zeros_like(prune_mask).bool()
+        mask3d_export[prune_mask] = mask3d
+        torch.save(mask3d_export, f"{results_dir}/mask3d.pth")
+    else:
+        torch.save(mask3d, f"{results_dir}/mask3d.pth")
+
 def main(
         data_dir: str = "./data/chair", # colmap path
         checkpoint: str = "./data/chair/checkpoint.pth", # checkpoint path, can generate from original 3DGS repo
@@ -534,7 +542,7 @@ def main(
 
     os.makedirs(results_dir, exist_ok=True)
     splats = load_checkpoint(checkpoint, data_dir, rasterizer=rasterizer, data_factor=data_factor)
-    splats_optimized = prune_by_gradients(splats)
+    splats_optimized, prune_mask = prune_by_gradients(splats)
     test_proper_pruning(splats, splats_optimized)
 
     del splats
@@ -542,7 +550,9 @@ def main(
 
     render_to_dir(f"{results_dir}/images", splats, show_visual_feedback)
     mask3d, mask3d_inverted = get_mask3d(splats, prompt, data_dir, results_dir, show_visual_feedback, mask_interval=mask_interval, voting_method=voting_method)
-
+    
+    export_mask(mask3d, prune_mask, results_dir)
+    
     extracted, deleted, masked = apply_mask3d(splats, mask3d, mask3d_inverted, results_dir)
     # render_mask_pred(f"{results_dir}/mask_bin_pred", masked, show_visual_feedback)
     render_to_gif(f"{results_dir}/extracted.gif", extracted, show_visual_feedback, use_checkerboard_background=True)
