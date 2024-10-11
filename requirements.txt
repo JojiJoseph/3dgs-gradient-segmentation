@@ -5,3 +5,4 @@ git+https://github.com/JojiJoseph/segment-anything-2.git # Supports python 3.8+ 
 tyro
 natsort
 git+https://github.com/ultralytics/CLIP.git
+opencv-python
