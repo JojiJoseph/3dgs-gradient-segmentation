@@ -19,6 +19,13 @@ python demo.py --help
 
 If needed, sample data (chair) can be found [here](https://drive.google.com/file/d/17xugq_6IaZBpm9B9QYU82hcwBelRR4vh/view?usp=sharing). Please create a folder named `data` on root folder and extract the contents of zip file to that folder. Then simply run `python demo.py`.
 
+To see the output after segmentation,
+```bash
+python viewer.py
+```
+
+Please type ```python viewer.py --help``` to see more options.
+
 
 
 https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
