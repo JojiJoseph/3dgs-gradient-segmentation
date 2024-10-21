@@ -278,7 +278,7 @@ def get_mask3d(splats, prompt, data_dir: str, results_dir: str, show_visual_feed
         colors_dc = splats["features_dc"]
         colors_rest = splats["features_rest"]
 
-        colors = colors_dc[:,0,:] * 0
+        colors = colors_dc[:,0,:] * 0 # Just to show that gradient (opacity * transmittance) is independent of color. Any value will work.
 
 
         opacities = torch.sigmoid(splats["opacity"])
