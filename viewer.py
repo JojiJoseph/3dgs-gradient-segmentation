@@ -119,6 +119,7 @@ def main(data_dir: str = "./data/chair", # colmap path
         checkpoint: str = "./data/chair/checkpoint.pth", # checkpoint path, can generate from original 3DGS repo
         rasterizer: Literal["original", "gsplat"] = "original", # Original or GSplat for checkpoints
         mask_path: str = "./results/chair/mask3d.pth",
+        apply_mask: bool = True,
         invert: bool = False,
         use_checkerboard_backgrounder: bool = True,
         data_factor: int = 1):
@@ -127,6 +128,8 @@ def main(data_dir: str = "./data/chair", # colmap path
     torch.set_grad_enabled(False)
 
     splats = load_checkpoint(checkpoint, data_dir, rasterizer=rasterizer, data_factor=data_factor)
+
+    show_anaglyph = False
 
 
     means = splats["means"].float()
@@ -137,18 +140,18 @@ def main(data_dir: str = "./data/chair", # colmap path
     opacities = torch.sigmoid(opacities)
     scales = torch.exp(scales)
     colors = torch.cat([splats["features_dc"], splats["features_rest"]], 1)
+    if apply_mask:
+        mask = torch.load(mask_path)
 
-    mask = torch.load(mask_path)
 
+        if invert:
+            mask = ~mask
 
-    if invert:
-        mask = ~mask
-
-    means = means[mask]
-    opacities = opacities[mask]
-    quats = quats[mask]
-    scales = scales[mask]
-    colors = colors[mask]
+        means = means[mask]
+        opacities = opacities[mask]
+        quats = quats[mask]
+        scales = scales[mask]
+        colors = colors[mask]
 
     cv2.namedWindow("Viewer", cv2.WINDOW_NORMAL)
     cv2.createTrackbar("Roll", "Viewer", 0, 180, lambda x: None)
@@ -214,10 +217,35 @@ def main(data_dir: str = "./data/chair", # colmap path
             alphas = alphas[0].cpu().numpy()
             output_cv = output_cv.astype(float) * alphas + create_checkerboard(width, height).astype(float) * (1 - alphas)
             output_cv = np.clip(output_cv, 0, 255).astype(np.uint8)
+        if show_anaglyph:
+            left = output_cv.copy()
+            left[..., :2] = 0
+            viewmat[:, 3] -= 0.1
+            output, _, _ = rasterization(
+                means,
+                quats,
+                scales * cv2.getTrackbarPos("Scaling", "Viewer") / 100.0,
+                opacities,
+                colors,
+                viewmat[None],
+                K[None],
+                width=width,
+                height=height,
+                sh_degree=3,
+            )
+            right = torch_to_cv(output[0])
+            if use_checkerboard_backgrounder:
+                right = right.astype(float) * alphas + create_checkerboard(width, height).astype(float) * (1 - alphas)
+                right = np.clip(right, 0, 255).astype(np.uint8)
+            right[..., -1] = 0
+            output_cv = left + right
+
         cv2.imshow("Viewer", output_cv)
         key = cv2.waitKey(1)
         if key == ord("q"):
             break
+        elif key == ord("3"):
+            show_anaglyph = not show_anaglyph
 
 
 def torch_to_cv(tensor, permute=False):

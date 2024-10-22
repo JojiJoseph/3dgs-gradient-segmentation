@@ -5,7 +5,13 @@ This repository contains the code for the paper **Gradient-Driven 3D Segmentatio
 Project page: https://jojijoseph.github.io/3dgs-segmentation
 Preprint: https://arxiv.org/abs/2409.11681
 
-**Update**: Sep 24, 2024 - Our poster titled **Segmentation of 3D Gaussians using Masked Gradients**, corresponds to the **preliminary work**, has been accepted to **SIGGRAPH Asia 2024**.
+**Updates**:
+
+Oct 22, 2024 - Added support to anaglyph 3D in `viewer.py`. Press `3` to toggle anaglyph 3D.
+
+Oct 11, 2024 - Added a simple viewer `viewer.py` to see the segmented output.
+
+Sep 24, 2024 - Our poster titled **Segmentation of 3D Gaussians using Masked Gradients**, corresponds to the **preliminary work**, has been accepted to **SIGGRAPH Asia 2024**.
 
 ## Setup
 
