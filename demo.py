@@ -514,7 +514,7 @@ def render_mask_pred(output_dir: str, splats, feedback: bool = False):
     if feedback:
         cv2.destroyAllWindows()
 
-def export_mask(mask3d, results_dir: str, prune_mask=None):
+def export_mask(mask3d, prune_mask, results_dir: str):
     if prune_mask is not None:
         mask3d_export = torch.zeros_like(prune_mask).bool()
         mask3d_export[prune_mask] = mask3d
