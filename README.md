@@ -34,7 +34,11 @@ python viewer.py
 
 Please type ```python viewer.py --help``` to see more options.
 
+Trained Mip-NeRF 360 Gaussian splat models (using [gsplat](https://github.com/nerfstudio-project/gsplat) with data factor = 4) can be found [here](https://drive.google.com/file/d/1ZCTgAE6vZOeUBdR3qPXdSPY01QQBHxeO/view?usp=sharing). Extract them to `data` folder.
 
+```bash
+python demo.py --data-dir data/360_v2/garden/ --checkpoint data/360_v2/garden/ckpts/ckpt_29999_rank0.pt --prompt table --rasterizer gsplat --data-factor 4 --results-dir results/garden
+```
 
 https://github.com/user-attachments/assets/62f537ca-87e8-4de8-af5d-150ea22dd1ec
 
