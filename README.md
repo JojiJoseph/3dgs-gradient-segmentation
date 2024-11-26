@@ -7,6 +7,9 @@ Preprint: https://arxiv.org/abs/2409.11681
 
 **Updates**:
 
+Nov 26, 2024 - Please check out follow up work  - [Gradient-Weighted Feature Back-Projection: A Fast Alternative to Feature Distillation in 3D Gaussian Splatting
+](https://github.com/JojiJoseph/3dgs-gradient-backprojection)
+
 Oct 22, 2024 - Added support to anaglyph 3D in `viewer.py`. Press `3` to toggle anaglyph 3D.
 
 Oct 11, 2024 - Added a simple viewer `viewer.py` to see the segmented output.
