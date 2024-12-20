@@ -121,9 +121,21 @@ def main(data_dir: str = "./data/chair", # colmap path
         mask_path: str = "./results/chair/mask3d.pth",
         apply_mask: bool = True,
         invert: bool = False,
-        use_checkerboard_backgrounder: bool = True,
+        use_checkerboard_background: bool = True,
         data_factor: int = 1):
-    
+    """Program to view the extracted 3D segment.
+
+    Args:
+        data_dir: Path to the colmap project.
+        checkpoint: checkpoint path, can generate from original 3DGS repo or using gsplat.
+        rasterizer: The rasterizer which is used to generate the checkpoint.
+        mask_path: Path to the mask file.
+        apply_mask: Apply the mask to the splats.
+        invert: Invert the mask.
+        use_checkerboard_background: Use checkerboard background.
+        data_factor: Factor to scale the resolution down.
+    """
+
     torch.set_default_device("cuda")
     torch.set_grad_enabled(False)
 
@@ -213,7 +225,7 @@ def main(data_dir: str = "./data/chair", # colmap path
         )
 
         output_cv = torch_to_cv(output[0])
-        if use_checkerboard_backgrounder:
+        if use_checkerboard_background:
             alphas = alphas[0].cpu().numpy()
             output_cv = output_cv.astype(float) * alphas + create_checkerboard(width, height).astype(float) * (1 - alphas)
             output_cv = np.clip(output_cv, 0, 255).astype(np.uint8)
@@ -234,7 +246,7 @@ def main(data_dir: str = "./data/chair", # colmap path
                 sh_degree=3,
             )
             right = torch_to_cv(output[0])
-            if use_checkerboard_backgrounder:
+            if use_checkerboard_background:
                 right = right.astype(float) * alphas + create_checkerboard(width, height).astype(float) * (1 - alphas)
                 right = np.clip(right, 0, 255).astype(np.uint8)
             right[..., -1] = 0
