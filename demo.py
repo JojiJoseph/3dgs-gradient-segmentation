@@ -534,6 +534,21 @@ def main(
         voting_method: Literal["gradient", "binary", "projection"] = "gradient",
 
 ):
+    """
+    Demo program.
+
+
+    Args:
+        data_dir: Path to the colmap project directory
+        checkpoint: Path to the checkpoint file
+        prompt: Prompt for the mask prediction
+        results_dir: Path to the output directory
+        show_visual_feedback: Show visual feedback
+        rasterizer: Rasterizer used to create the checkpoint
+        data_factor: Factor to scale down the resolution of the images
+        mask_interval: The interval between images for taking masked gradients
+        voting_method: Voting method to generate 3D mask
+    """
     
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is required for this demo")
