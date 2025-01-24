@@ -8,6 +8,7 @@ import numpy as np
 import json
 from typing import Literal
 import pycolmap_scene_manager as pycolmap
+from scipy.spatial.transform import Rotation as scipyR
 
 device = torch.device("cuda:0")
 
@@ -194,6 +195,19 @@ def main(data_dir: str = "./data/chair", # colmap path
     width = int(K[0, 2] * 2)
     height = int(K[1, 2] * 2)
 
+    def update_trackbars_from_viewmat(world_to_camera):
+        # if torch tensor is passed, convert to numpy
+        if isinstance(world_to_camera, torch.Tensor):
+            world_to_camera = world_to_camera.cpu().numpy()
+        r = scipyR.from_matrix(world_to_camera[:3,:3])
+        roll, pitch, yaw = r.as_euler('xyz')
+        cv2.setTrackbarPos("Roll", "Viewer", np.rad2deg(roll).astype(int))
+        cv2.setTrackbarPos("Pitch", "Viewer", np.rad2deg(pitch).astype(int))
+        cv2.setTrackbarPos("Yaw", "Viewer", np.rad2deg(yaw).astype(int))
+        cv2.setTrackbarPos("X", "Viewer", int(world_to_camera[0, 3]*100))
+        cv2.setTrackbarPos("Y", "Viewer", int(world_to_camera[1, 3]*100))
+        cv2.setTrackbarPos("Z", "Viewer", int(world_to_camera[2, 3]*100))
+
     while True:
         roll = cv2.getTrackbarPos("Roll", "Viewer")
         pitch = cv2.getTrackbarPos("Pitch", "Viewer")
@@ -258,6 +272,16 @@ def main(data_dir: str = "./data/chair", # colmap path
             break
         elif key == ord("3"):
             show_anaglyph = not show_anaglyph
+        if key in [ord("w"), ord("a"), ord("s"), ord("d")]:
+            if key == ord("w"):
+                viewmat[2, 3] -= 0.1
+            if key == ord("s"):
+                viewmat[2, 3] += 0.1
+            if key == ord("a"):
+                viewmat[0, 3] += 0.1
+            if key == ord("d"):
+                viewmat[0, 3] -= 0.1
+            update_trackbars_from_viewmat(viewmat)
 
 
 def torch_to_cv(tensor, permute=False):
