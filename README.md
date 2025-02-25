@@ -7,6 +7,8 @@ Preprint: https://arxiv.org/abs/2409.11681
 
 **Updates**:
 
+Feb 25, 2025 - Added an interactive segmentation script `interactive_segmenter.py`.
+
 Nov 26, 2024 - Please check out follow up work  - [Gradient-Weighted Feature Back-Projection: A Fast Alternative to Feature Distillation in 3D Gaussian Splatting
 ](https://github.com/JojiJoseph/3dgs-gradient-backprojection)
 
