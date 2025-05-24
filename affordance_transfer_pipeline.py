@@ -10,6 +10,7 @@ The pipeline is as follows.
 
 from collections import defaultdict
 import pickle as pkl
+import time
 import numpy as np
 import tyro
 import imageio
@@ -398,6 +399,115 @@ def render_and_vote(data_dir, checkpoint, results_dir):
         cv2.imwrite(f"{affordance_maps_3d_dir}/{image.name}", output_cv)
         cv2.waitKey(1)
 
+def render_and_vote_fast(data_dir, checkpoint, results_dir):
+    splats = load_checkpoint(checkpoint, data_dir, rasterizer="gsplat")
+    means = splats["means"]
+    colors_dc = splats["features_dc"]
+    colors_rest = splats["features_rest"]
+    colors = torch.cat([colors_dc, colors_rest], dim=1)
+    opacities = torch.sigmoid(splats["opacity"])
+    scales = torch.exp(splats["scaling"])
+    quats = splats["rotation"]
+    K = splats["camera_matrix"]
+    width = int(K[0, 2] * 2)
+    height = int(K[1, 2] * 2)
+    colmap_project = splats["colmap_project"]
+
+    affordance_dir = os.path.join(results_dir, "affordance_maps")
+    affordance_map_images_dir = os.path.join(results_dir, "affordance_map_images")
+    affordance_maps_3d_dir = os.path.join(results_dir, "affordance_map_images_3dgs")
+    os.makedirs(affordance_maps_3d_dir, exist_ok=True)
+
+
+
+
+    votes = torch.zeros((colors.shape[0], 8)).to(device) # Hardcoding for now
+
+    dummy_colors = torch.zeros((len(colors),8)).to(device)
+    dummy_colors.requires_grad = True
+
+    # colors.requires_grad = True
+
+    for image in sorted(colmap_project.images.values(), key=lambda x: x.name):
+        viewmat = get_viewmat_from_colmap_image(image)
+
+        output, _, meta = rasterization(
+            means,
+            quats,
+            scales,
+            opacities,
+            dummy_colors,
+            viewmat[None],
+            K[None],
+            width=width,
+            height=height,
+            # sh_degree=3,
+            # render_mode="RGB+ED",
+            # backgrounds=torch.tensor([[0.0, 0.0, 0.0]]).to(device),
+        )
+
+        label_map_name = image.name.split(".")[0] + ".npy"
+        label_map = np.load(os.path.join(affordance_dir, label_map_name))
+        
+
+        mask = np.zeros((height, width, 8), dtype=np.float32)
+        label_map = cv2.resize(
+            label_map, (width, height), interpolation=cv2.INTER_NEAREST
+        )
+        
+
+        # Voting
+        for i in range(8):
+            mask[label_map == i, i] = 1
+        
+
+        mask = torch.from_numpy(mask).to(device).float()
+
+
+        # for i in range(8):
+        #     loss = ((mask == i) * output[0]).mean()
+        #     loss.backward(retain_graph=True)
+        #     votes[i] += colors.grad[..., 0, :3].norm(dim=[1])
+        #     colors.grad.zero_()
+        loss = (mask * output[0]).mean()
+        loss.backward()
+        votes += dummy_colors.grad.clone()
+        dummy_colors.grad.zero_()
+    
+    votes = votes.T
+    votes_path = os.path.join(results_dir, "votes.npy")
+    votes_np = votes.cpu().numpy()
+    np.save(votes_path, votes_np)
+
+    colors_new = colors.clone()
+    color_palette = np.array([[125, 125, 125], [255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0], [255, 0, 255], [0, 255, 255], [128, 0, 0]])
+
+    for i in range(8):
+        mask = torch.argmax(votes, dim=0) == i
+        colors_new[mask, 0, :3] = colors_new[mask, 0, :3] * 0.5 + 0.5*((torch.from_numpy(color_palette[i])/255.).to(device)-0.5)/ (1/np.sqrt(4*np.pi))
+        colors_new[:, 1:, :3] = 0.1 * colors_new[:, 1:, :3]
+
+    for image in sorted(colmap_project.images.values(), key=lambda x: x.name):
+        viewmat = get_viewmat_from_colmap_image(image)
+
+        output, _, meta = rasterization(
+            means,
+            quats,
+            scales,
+            opacities,
+            colors_new,
+            viewmat[None],
+            K[None],
+            width=width,
+            height=height,
+            sh_degree=3,
+            backgrounds=torch.tensor([[0.0, 0.0, 0.0]]).to(device),
+        )
+
+        output_cv = torch_to_cv(output[0, ..., :3].detach())
+        cv2.imshow("Mapped affordance regions", output_cv)
+        cv2.imwrite(f"{affordance_maps_3d_dir}/{image.name}", output_cv)
+        cv2.waitKey(1)
 
 def calculate_affordance_map(data_dir, labels_dir, results_dir, k=5):
     def most_frequent(array):
@@ -639,7 +749,8 @@ def main(
     calculate_affordance_map(data_dir, labels_dir, results_dir)
 
     # Render and vote
-    render_and_vote(data_dir, checkpoint, results_dir)
+    render_and_vote_fast(data_dir, checkpoint, results_dir)
+    # print(f"Time taken for render and vote: {t2-t1} seconds")
 
     # Evaluate the results. Comment out if you don't want to evaluate
     evaluate_results(data_dir, checkpoint, results_dir)
