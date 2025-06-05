@@ -74,7 +74,7 @@ Augmented reality.
 
 https://github.com/user-attachments/assets/20ee5c8b-031e-423d-890d-368e1a9c5731
 
-Reorganzing objects in real time.
+Reorganizing objects in real time.
 
 https://github.com/user-attachments/assets/91cc6ef1-0fd2-44a5-8881-61a042662a95
 
